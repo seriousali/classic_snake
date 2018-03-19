@@ -1,0 +1,89 @@
+<canvas id="snake" width="400" height="400"></canvas>
+<script>
+  window.onload = function () {
+    canv = document.getElementById("snake");
+    ctx = canv.getContext("2d");
+    
+    document.addEventListener("keydown", keyPush);
+    setInterval(game, 1000/15);
+  }
+
+  px=py=10; // Player position
+  gs=tc=20; //  Grid Size and Tile Count
+  bx=by=15; // Berry X and Berry Y co-ordinates
+  xv=yv=0; // X velocity = Y velocity
+  st=[]; // Snake Trail
+  tail=5; // Tail Length
+
+  function game() {
+    // 
+    px+=xv;
+    py+=yv;
+
+    // Looping from edges
+    if (px<0) {
+      px = tc-1;
+    }
+    if (px>tc-1) {
+      px = 0;
+    }
+    if (py<0) {
+      py = tc-1;
+    }
+    if (py>tc-1) {
+      py = 0;
+    }
+
+
+    // Background
+    ctx.fillStyle = "black";
+    ctx.fillRect(0,0,canv.width,canv.height);
+
+    // Snake
+    ctx.fillStyle = "lime";
+    for (let i = 0; i < st.length; i++) {
+      ctx.fillRect(st[i].x*gs,st[i].y*gs,gs-2,gs-2);
+
+      // Reset tail length to 5 if hits itself
+      if (st[i].x == px && st[i].y == py) {
+        tail = 5; 
+      }
+    }
+
+    // push to trail
+    st.push({x:px,y:py});
+
+    // reset snake on death
+    while(st.length>tail) {
+      st.shift();
+    }
+    // Check if hits apple  
+    if (bx==px && by==py ) {
+      tail++;
+      bx=Math.floor(Math.random()*tc);
+      by=Math.floor(Math.random()*tc);
+    }
+
+    // Apple
+    ctx.fillStyle = "red";
+    ctx.fillRect(bx*gs,by*gs,gs-2,gs-2);
+  }
+
+  function keyPush(evt) {
+    switch (evt.keyCode) {
+      case 37:
+        xv=-1; yv=0; //
+        break;
+      case 38:
+        xv=0; yv=-1; //
+        break;
+      case 39:
+        xv=1; yv=0; //
+        break;
+      case 40:
+        xv=0; yv=1; //
+        break;
+    }
+  }
+
+</script>
