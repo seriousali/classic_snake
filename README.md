@@ -1,8 +1,8 @@
 # classic_snake
-Classic Snake game made with Canvas and Vanilla Javascript | Learning experiment
+
+Classic Snake game made with Canvas and Vanilla JavaScript | Learning experiment
 
 ## Possible updates
-- High Score Tracking
-- Begin and end game buttons
+
 - Death Splash Screen
 - Leaderboard

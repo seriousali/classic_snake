@@ -1,19 +1,38 @@
 <canvas id="snake" width="400" height="400"></canvas>
+<!--
+  TODO: Add Splash screens 
+  TODO: Add Leader Board
+  TODO: Center the board
+-->
+<button id="startBtn" onclick="startGame()">Play</button>
+<button id="points">0</button>
 <script>
   window.onload = function () {
     canv = document.getElementById("snake");
     ctx = canv.getContext("2d");
-    
-    document.addEventListener("keydown", keyPush);
+    points = document.getElementById("points");
+    startBtn = document.getElementById("startBtn");
     setInterval(game, 1000/15);
   }
+  px=py=10; 
+  gs=tc=20; 
+  bx=by=15; 
+  xv=yv=0; 
+  st=[]; 
+  tail=5; 
+  
+  function startGame() {
+    document.addEventListener("keydown", keyPush);
+    score=0;
+    xv=1;
+  }
 
-  px=py=10; // Player position
-  gs=tc=20; //  Grid Size and Tile Count
-  bx=by=15; // Berry X and Berry Y co-ordinates
-  xv=yv=0; // X velocity = Y velocity
-  st=[]; // Snake Trail
-  tail=5; // Tail Length
+  function endGame() {
+    document.removeEventListener("keydown", keyPush);
+    tail = 5; 
+    points.innerHTML = tail - 5;
+    xv=yv=0; // X velocity = Y velocity 
+  }
 
   function game() {
     // 
@@ -34,7 +53,6 @@
       py = 0;
     }
 
-
     // Background
     ctx.fillStyle = "black";
     ctx.fillRect(0,0,canv.width,canv.height);
@@ -46,22 +64,24 @@
 
       // Reset tail length to 5 if hits itself
       if (st[i].x == px && st[i].y == py) {
-        tail = 5; 
+        endGame();
       }
     }
 
     // push to trail
     st.push({x:px,y:py});
 
-    // reset snake on death
-    while(st.length>tail) {
+    // 
+    while(st.length>tail) {      
       st.shift();
     }
     // Check if hits apple  
     if (bx==px && by==py ) {
       tail++;
+      score++;
       bx=Math.floor(Math.random()*tc);
       by=Math.floor(Math.random()*tc);
+      points.innerHTML = tail - 5;
     }
 
     // Apple
